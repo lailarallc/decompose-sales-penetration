@@ -188,6 +188,19 @@ is reversed, strike it through and add the replacement below — don't delete.
 - **Do not:** touch the canonical `cinderhaven` raw schema or `cinderhaven-db`
   internals (its parked `pg` health-check issue) without separate explicit go-ahead.
 
+### 2026-07-27 — Refactors of the seed-locked panel must be proven value-preserving by frame hashing
+- **Why:** `cinderhaven-household-panel` is seed-locked and shared with tool #4, so any
+  change to its generation code (transactions/pricing/metrics) must leave every generated
+  frame byte-identical, or downstream figures silently drift.
+- **Decision:** Before/after any such refactor, hash all frames (`get_households`,
+  `get_transactions`, `get_sku_prices`, `get_price_path`, `get_period_metrics`,
+  `get_buyer_flow`, `get_launch_items`) via `pandas.util.hash_pandas_object` + shape +
+  columns. Identical hashes are the gate. If a hash moves, the refactor changed the panel —
+  revert or bump `PANEL_VERSION` through the change protocol. (Used 2026-07-27 for the
+  calendar-SSOT / dedupe refactor; all 7 hashes unchanged.)
+- **Scope:** `packages/cinderhaven-household-panel`. **Do not:** land generation-code
+  refactors without the hash check.
+
 ## Visualization
 
 ### 2026-07-06 — Chart rules baked into the shared template (from #5)
@@ -213,6 +226,15 @@ is reversed, strike it through and add the replacement below — don't delete.
   is pinned open by the live session (Windows lock), so it could not be renamed
   in place. Work lives in `decompose-sales-penetration`; the empty misspelled
   folder should be deleted from a session not rooted in it.
+
+### 2026-07-27 — Ruff enforces E, F, W, I at 100 cols (an explicit lint select is required)
+- **Why:** The `[tool.ruff]` config set `line-length = 100` but selected no rule set, so
+  ruff only ran E/F defaults and E501 never fired — the pinned width was silently ignored.
+- **Decision:** `[tool.ruff.lint] select = ["E", "F", "W", "I"]` in the root pyproject. The
+  100-col width, unused imports/names, and import sorting are now enforced across app +
+  packages (root config applies to `packages/` since they have no own `[tool.ruff]`).
+- **Scope:** repo-wide lint. **Do not:** rely on `line-length` alone to enforce width — it
+  needs the E rules selected.
 
 ---
 

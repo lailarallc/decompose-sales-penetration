@@ -7,6 +7,35 @@ things that didn't work, see FAILURES.md.
 
 ---
 
+## 2026-07-27 14:28 — Session close (/wrap): improve + code review + UI review, redeployed
+
+**Started from:** Decompose live + public + brand-scale; scheduled improvement review
+due today. Task: run improve, code review, and UI review.
+
+**Did:** Full audit + 4 parallel review personas (correctness/math, Python, testing,
+security) + automated UI review vs the live site. **0 critical** — math verified fully
+correct, security clean (no secrets, liveness-only health, no injection paths). Fixed
+every finding incl. nice-to-haves in 11 commits: panel version 0.1.0→0.2.0; panel
+internal cleanup (shared `line_of`, price path from calendar SSOT, dead code, hoisted
+imports) — **value-preserving, every generated frame hashes identical**; typed
+decomposition/data APIs (TypedDicts) + legible bit-identical Shapley; neutral zero-delta
+card; ruff now enforces 100-col (`[tool.ruff.lint] select`); hardened `parse_filter_state`
++ non-root Docker + adversarial tests; **+9 tests covering the untested "sales fell"
+verdict** + formatters + delta-down + KeyError; dropdown radius/border → palette,
+`.view-heading` stray serif removed. Pushed + **redeployed to Fly**, verified live
+(health 200, new CSS markers serving). Also repaired dangling editable installs (pinned
+to the deleted `projects\active\` path — pytest couldn't import the panel).
+
+**State:** 64 app + 58 panel = **122 tests green**, ruff clean, panel byte-identical,
+no secrets. Deployed + verified: decompose.lailarallc.com/health 200. Clean tree, pushed.
+2 memories saved (editable-install gotcha, panel hash-check).
+
+**Next:** No open work on Decompose. Natural next: tool #4 (Leaky Bucket) — imports the
+now-v0.2.0 panel (shared factor k, launch stories baked in). Still awaiting Shawn's
+blog/work-card copy pass in `docs/launch/`.
+
+---
+
 ## 2026-07-07 00:55 — Session close (/wrap)
 
 **Started from:** Slices 1 & 2 done; next was Slice 3 (app shell). Repo private, not deployed.

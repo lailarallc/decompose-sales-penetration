@@ -10,6 +10,27 @@ they are not re-discovered here.
 
 ## Entries
 
+### 2026-07-27 — pytest couldn't import the panel: editable installs pinned to the deleted `active` path
+
+**Attempted:** Ran `pytest` at session start; all test modules failed to collect with
+`ModuleNotFoundError: No module named 'cinderhaven_household_panel'` — even though
+`pip list` showed the package "installed" (at v0.1.0).
+
+**Why it didn't work:** The three local editable installs (`cinderhaven-store-universe`,
+`cinderhaven-household-panel`, `decompose-sales-penetration`) were pinned to the OLD repo
+path `C:\Users\mssha\projects\active\decompose-sales-penetration`. That folder was deleted
+when the repo moved to `projects\published\`, so every editable install dangled. `pip show`
+reporting a Location under `projects\active\...` is the tell.
+
+**What we tried instead / fix:** Reinstalled from the current location —
+`pip install -e packages/cinderhaven-store-universe -e packages/cinderhaven-household-panel -e . --no-deps`.
+Not a code change. (This also surfaced the panel `pyproject.toml` still at 0.1.0 while
+`PANEL_VERSION` was 0.2.0 — bumped to 0.2.0.)
+
+**Status:** Resolved. **Lesson:** if tests can't import the local packages on this machine,
+reinstall editable from `published\` — don't debug the code. **Tags:** editable-install,
+pip, folder-move, pytest
+
 ### 2026-07-07 — The wrangler OAuth token can't edit Cloudflare DNS (wasted a long hunt)
 
 **Attempted:** To create the `decompose.lailarallc.com` DNS record, searched env vars,
