@@ -6,6 +6,8 @@ exec defaults, and that the thin pass-throughs and the decompose() bundle stay h
 (the waterfall still reconciles to ΔSales through this layer).
 """
 
+import json
+
 import cinderhaven_household_panel as hp
 import pandas as pd
 
@@ -41,8 +43,6 @@ class TestParseFilterState:
             )
 
     def test_full_state_is_passed_through_verbatim(self):
-        import json
-
         state = json.dumps(
             {
                 "period_a": "2024-Q1",
@@ -52,6 +52,31 @@ class TestParseFilterState:
             }
         )
         assert pd_layer.parse_filter_state(state) == ("2024-Q1", "2025-Q2", "AS", "RET-WALMART")
+
+    def test_malformed_json_falls_back_to_defaults(self):
+        # A crafted POST to the Dash callback endpoint can send any string as the store.
+        assert pd_layer.parse_filter_state("not json{") == (
+            "2024-Q4", "2025-Q4", "__all__", "__all__",
+        )
+
+    def test_non_object_json_body_falls_back_to_defaults(self):
+        for body in ("123", "[1, 2, 3]", '"a string"', "null"):
+            assert pd_layer.parse_filter_state(body) == (
+                "2024-Q4", "2025-Q4", "__all__", "__all__",
+            )
+
+    def test_unknown_codes_fall_back_but_keep_valid_fields(self):
+        state = json.dumps(
+            {
+                "period_a": "1999-Q9",        # not a real quarter
+                "period_b": "2024-Q4",        # valid — kept
+                "product_line": "ZZ",         # not a real line
+                "retailer": "RET-DOESNOTEXIST",
+            }
+        )
+        assert pd_layer.parse_filter_state(state) == (
+            "2024-Q4", "2024-Q4", "__all__", "__all__",
+        )
 
 
 class TestFilterOptions:

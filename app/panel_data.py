@@ -91,13 +91,31 @@ def parse_filter_state(filter_json: str | None) -> tuple[str, str, str, str]:
     instead of re-decoding the store, so the four-key shape lives in one place
     alongside DEFAULT_FILTER_STATE. Periods fall back to the exec defaults; the
     line/retailer sentinels ('__all__') are passed through and normalized downstream.
+
+    Hardened against untrusted input: the dcc.Store value is client-supplied (a POST
+    to the Dash callback endpoint can carry any string), so malformed JSON, a non-object
+    body, or an unknown code all fall back to a valid default rather than raising a 500
+    or reaching the panel accessors with a bad key.
     """
-    filters = json.loads(filter_json) if filter_json else {}
+    try:
+        filters = json.loads(filter_json) if filter_json else {}
+    except (TypeError, ValueError):
+        filters = {}
+    if not isinstance(filters, dict):
+        filters = {}
+
+    periods = set(ANALYSIS_QUARTERS)
+    lines = {opt["value"] for opt in product_line_options()}
+    retailers = {opt["value"] for opt in retailer_options()}
+
+    def _valid(value, allowed, fallback):
+        return value if value in allowed else fallback
+
     return (
-        filters.get("period_a") or DEFAULT_PERIOD_A,
-        filters.get("period_b") or DEFAULT_PERIOD_B,
-        filters.get("product_line") or "__all__",
-        filters.get("retailer") or "__all__",
+        _valid(filters.get("period_a"), periods, DEFAULT_PERIOD_A),
+        _valid(filters.get("period_b"), periods, DEFAULT_PERIOD_B),
+        _valid(filters.get("product_line"), lines, "__all__"),
+        _valid(filters.get("retailer"), retailers, "__all__"),
     )
 
 

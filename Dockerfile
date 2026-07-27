@@ -19,6 +19,11 @@ COPY app/ /app/app/
 COPY assets/ /app/assets/
 COPY wsgi.py /app/
 
+# Drop root: run the server as an unprivileged user (defense in depth — the app
+# writes nothing to disk and needs no elevated capability).
+RUN useradd --create-home --uid 10001 appuser
+USER appuser
+
 EXPOSE 8050
 
 # No DATABASE_URL — Decompose has no database. Each gunicorn worker warms its own
