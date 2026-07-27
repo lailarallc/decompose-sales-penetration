@@ -1,6 +1,6 @@
 [project]
 name = "cinderhaven-household-panel"
-version = "0.1.0"
+version = "0.2.0"
 description = "Shared, seed-locked synthetic household panel for the Cinderhaven penetration tools (#3 Decompose, #4 Leaky Bucket)"
 requires-python = ">=3.11"
 # cinderhaven-store-universe is a peer package (doormath/packages). It is the SSOT
