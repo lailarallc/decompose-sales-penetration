@@ -212,6 +212,43 @@ Steps:
 
 <!-- Entries are added by /improve — don't delete this section -->
 
+### 2026-07-27 — Improvement pass (improve + code review + UI review)
+- **Trigger:** user-initiated (scheduled review was due 2026-07-27); ran the full
+  audit + 4 parallel code-review personas (correctness/math, Python, testing,
+  security) + automated UI review against the live site.
+- **What was reviewed:** all app + panel code, tests, deps, git hygiene, and the
+  live site's rendered brand tokens.
+- **Findings:** 0 critical. Math surface verified fully correct (Shapley weights,
+  k canceling in rates, denominator guards, buyer-flow signs). Security clean
+  (no secrets, liveness-only health confirmed, no injection paths).
+- **Environment fix (not a repo change):** the editable installs pointed at the
+  deleted `projects\active\` path, so pytest couldn't import the panel — reinstalled
+  from `published\`.
+- **What was fixed (9 commits, all local, tests green throughout):**
+  1. Panel packaging version bumped 0.1.0 → 0.2.0 (metadata drift vs PANEL_VERSION).
+  2. Panel internal cleanup — one shared `constants.line_of`, price path now sourced
+     from the calendar SSOT, dead `later_by_launch` removed, imports hoisted.
+     **Value-preserving: every generated frame hashes identical before/after.**
+  3. Typed the decomposition/data APIs (Verdict / DecomposeResult TypedDicts, param
+     hints) and made the Shapley formulas legible (bit-identical).
+  4. Neutral zero-delta metric card (was rendered as a green "+").
+  5. Ruff now actually enforces the pinned 100-col (added `[tool.ruff.lint] select`);
+     fixed 8 over-length lines, 2 ambiguous `l`, sorted imports.
+  6. Hardened `parse_filter_state` against crafted callback POSTs (bad JSON / non-dict
+     / unknown codes → safe defaults) + non-root Docker user + adversarial tests.
+  7. Covered the previously-untested "sales fell" verdict path + card formatters +
+     delta-down render + unknown-period guard (+9 tests).
+  8. Dropdown radius/border to palette tokens; removed a stray UA serif on
+     `.view-heading` (verified live: 2px / #d9d9d9 / Source Sans 3; title stays Playfair).
+  9. Added a local `review.yaml` (gitignored per project convention).
+- **State after:** 64 app + 58 panel = **122 tests green**, ruff clean, panel output
+  byte-identical, tree committed locally (NOT pushed/deployed — the UI/CSS + Docker +
+  security changes need a deploy to reach the live site; awaiting Shawn's go-ahead).
+- **Deferred:** none outstanding from this pass. The UI-review tool's always-on
+  per-element overflow scan reports Plotly SVG noise it can't be told to skip — a
+  possible future improvement to the shared `ui-review-skill` tool, out of scope here.
+- **Next review:** 2026-08-24 (active project).
+
 ### 2026-07-06 — Improvement pass
 - **Trigger:** user-initiated (to clear the /publish gate; project is brand-new,
   Claude-authored, so no accumulated user concerns).
