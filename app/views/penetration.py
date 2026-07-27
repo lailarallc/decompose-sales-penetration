@@ -87,7 +87,10 @@ def _build_penetration_trend(metrics, period_a, period_b):
             font=dict(family=FONT_SERIF, size=22, color=INK),
         ),
         yaxis=dict(
-            title=dict(text="Penetration %", font=dict(family=FONT_SANS, size=14, color=TEXT_SECONDARY)),
+            title=dict(
+                text="Penetration %",
+                font=dict(family=FONT_SANS, size=14, color=TEXT_SECONDARY),
+            ),
             showgrid=True,
             gridcolor=GRIDLINE,
             gridwidth=1,
@@ -155,7 +158,10 @@ def _build_buyer_flow(flow):
         barmode="relative",
         uniformtext=dict(minsize=9, mode="hide"),
         yaxis=dict(
-            title=dict(text="Households", font=dict(family=FONT_SANS, size=14, color=TEXT_SECONDARY)),
+            title=dict(
+                text="Households",
+                font=dict(family=FONT_SANS, size=14, color=TEXT_SECONDARY),
+            ),
             showgrid=True, gridcolor=GRIDLINE, gridwidth=1, showline=False,
             automargin=True, zeroline=True, zerolinecolor=REFERENCE, zerolinewidth=1,
             tickformat=",.0f",

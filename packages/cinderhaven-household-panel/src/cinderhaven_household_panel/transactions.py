@@ -147,7 +147,9 @@ def _launch_transactions(hh: pd.DataFrame, quarters: pd.DataFrame,
             dates = qrow["start_date"] + pd.to_timedelta(offsets, unit="D")
             units = 1 + rng.poisson(0.4, size=len(pos_array))
             unit_price = round(base_price * pidx, 2)
-            retailers = _RETAILER_IDS[rng.choice(len(_RETAILER_IDS), size=len(pos_array), p=_RETAILER_WEIGHTS)]
+            retailers = _RETAILER_IDS[
+                rng.choice(len(_RETAILER_IDS), size=len(pos_array), p=_RETAILER_WEIGHTS)
+            ]
             rows.append(pd.DataFrame({
                 "household_id": hh_ids[pos_array],
                 "quarter_index": qi,

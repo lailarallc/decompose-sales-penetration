@@ -7,8 +7,8 @@ and repeat rates are computed downstream from the transactions, never hardcoded.
 
 import pandas as pd
 
-from .calendar import QUARTERS
 from ._rng import child_rng
+from .calendar import QUARTERS
 from .constants import ALL_SKUS, PRODUCT_LINES, line_of
 
 # Base price range ($/unit) per product line for the ~$25M specialty brand.

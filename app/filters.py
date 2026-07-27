@@ -32,7 +32,10 @@ def build_filter_bar():
         [
             html.Div(
                 [
-                    html.Label("Period A", title="The earlier period — the 'from' side of the comparison."),
+                    html.Label(
+                        "Period A",
+                        title="The earlier period — the 'from' side of the comparison.",
+                    ),
                     dcc.Dropdown(
                         id="filter-period-a",
                         options=_quarter_options(),
@@ -46,7 +49,10 @@ def build_filter_bar():
             ),
             html.Div(
                 [
-                    html.Label("Period B", title="The later period — the 'to' side of the comparison."),
+                    html.Label(
+                        "Period B",
+                        title="The later period — the 'to' side of the comparison.",
+                    ),
                     dcc.Dropdown(
                         id="filter-period-b",
                         options=_quarter_options(),

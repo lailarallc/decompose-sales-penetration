@@ -33,5 +33,11 @@ include = ["app*"]
 line-length = 100
 target-version = "py311"
 
+[tool.ruff.lint]
+# Enforce the pinned 100-col width and catch unused imports / undefined names /
+# unsorted imports. Without an explicit select, ruff only ran E/F defaults and
+# never enforced E501 (line-length) — the pinned width was silently ignored.
+select = ["E", "F", "W", "I"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

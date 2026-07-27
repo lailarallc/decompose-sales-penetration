@@ -37,8 +37,8 @@ def _yoy_erosion_count(pen, sales, year_a, year_b):
 def _year_mean_pen_and_total_sales(pen, sales, year):
     labels = [f"{year}-Q{q}" for q in (1, 2, 3, 4)]
     return (
-        sum(pen[l] for l in labels) / 4,
-        sum(sales[l] for l in labels),
+        sum(pen[lbl] for lbl in labels) / 4,
+        sum(sales[lbl] for lbl in labels),
     )
 
 

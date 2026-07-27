@@ -6,9 +6,9 @@ exec defaults, and that the thin pass-throughs and the decompose() bundle stay h
 (the waterfall still reconciles to ΔSales through this layer).
 """
 
+import cinderhaven_household_panel as hp
 import pandas as pd
 
-import cinderhaven_household_panel as hp
 from app import panel_data as pd_layer
 
 
@@ -36,13 +36,20 @@ class TestParseFilterState:
 
     def test_empty_or_none_falls_back_to_exec_defaults(self):
         for empty in (None, "", "{}"):
-            assert pd_layer.parse_filter_state(empty) == ("2024-Q4", "2025-Q4", "__all__", "__all__")
+            assert pd_layer.parse_filter_state(empty) == (
+                "2024-Q4", "2025-Q4", "__all__", "__all__",
+            )
 
     def test_full_state_is_passed_through_verbatim(self):
         import json
 
         state = json.dumps(
-            {"period_a": "2024-Q1", "period_b": "2025-Q2", "product_line": "AS", "retailer": "RET-WALMART"}
+            {
+                "period_a": "2024-Q1",
+                "period_b": "2025-Q2",
+                "product_line": "AS",
+                "retailer": "RET-WALMART",
+            }
         )
         assert pd_layer.parse_filter_state(state) == ("2024-Q1", "2025-Q2", "AS", "RET-WALMART")
 
