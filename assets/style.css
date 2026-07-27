@@ -482,8 +482,9 @@ html, body {
 .view-heading { margin: 8px 0 20px; }
 .view-title {
     font-family: var(--ll-serif);
-    font-size: 26px;
+    font-size: 22px;   /* DS section title (desktop); 18px mobile below */
     font-weight: 700;
+    line-height: 1.3;
     color: var(--ll-ink, #0d0d0d);
     margin: 0 0 6px;
 }
@@ -507,9 +508,10 @@ html, body {
 }
 .verdict-figure {
     font-family: var(--ll-serif);
-    font-size: 40px;
+    font-size: 64px;   /* DS headline number (desktop); 44px mobile below */
     font-weight: 700;
-    line-height: 1.1;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
     color: var(--ll-ink, #0d0d0d);
 }
 .verdict-change {
@@ -633,7 +635,7 @@ html, body {
 }
 .metric-card-value {
     font-family: var(--ll-serif);
-    font-size: 30px;
+    font-size: 28px;   /* DS benchmark value (desktop); 24px mobile below */
     font-weight: 700;
     line-height: 1.05;
     color: var(--ll-ink, #0d0d0d);
@@ -657,6 +659,13 @@ html, body {
 }
 .metric-card-delta.delta-up { color: var(--ll-hk-25); }
 .metric-card-delta.delta-down { color: var(--ll-tokyo-40); }
+
+/* DS display type-scale — mobile steps (desktop values set on each rule above) */
+@media (max-width: 640px) {
+    .view-title { font-size: 18px; }
+    .verdict-figure { font-size: 44px; }
+    .metric-card-value { font-size: 24px; }
+}
 
 .detail-subhead {
     font-family: var(--ll-serif);
