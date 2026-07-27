@@ -37,10 +37,13 @@
     background: transparent !important;
 }
 
-/* Dash dropdown — override Dash 4.x default purple accent */
+/* Dash dropdown — override Dash 4.x defaults (purple accent, 4px radius, grey
+   border) to the Lailara design tokens (2px radius, palette border). */
 .dash-dropdown {
     accent-color: var(--ll-chicago-20) !important;
     outline-color: var(--ll-chicago-20) !important;
+    border-radius: var(--ll-radius) !important;
+    border-color: var(--ll-london-85) !important;
 }
 
 /* Filter bar */
@@ -479,7 +482,9 @@ html, body {
 }
 
 /* View heading + blurb */
-.view-heading { margin: 8px 0 20px; }
+/* Set a brand token on the wrapper so it never inherits a stray UA serif; the
+   title (serif) and blurb (sans) below set their own family regardless. */
+.view-heading { margin: 8px 0 20px; font-family: var(--ll-sans); }
 .view-title {
     font-family: var(--ll-serif);
     font-size: 22px;   /* DS section title (desktop); 18px mobile below */
