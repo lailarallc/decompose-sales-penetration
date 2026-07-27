@@ -13,6 +13,7 @@ sales holds exactly regardless of filter.
 
 import pandas as pd
 
+from .calendar import get_quarters
 from .constants import N_HOUSEHOLDS
 from .projection import (
     PROJECTED_FLOW_COLUMNS,
@@ -38,8 +39,6 @@ def get_period_metrics(product_line=None, retailer_id=None) -> pd.DataFrame:
     penetration, trips, frequency, units, sales, spend_per_trip, units_per_trip,
     price_per_unit. One row per quarter (0-11), in calendar order.
     """
-    from .calendar import get_quarters
-
     tx = _filtered(product_line, retailer_id)
     quarters = get_quarters()[["quarter_index", "label", "is_analysis"]]
 
@@ -82,8 +81,6 @@ def get_buyer_flow(product_line=None, retailer_id=None) -> pd.DataFrame:
     retained, new, lapsed. Identities hold every row:
     prior_buyers = retained + lapsed; current_buyers = retained + new.
     """
-    from .calendar import get_quarters
-
     tx = _filtered(product_line, retailer_id)
     quarters = get_quarters()[["quarter_index", "label"]].sort_values("quarter_index")
 

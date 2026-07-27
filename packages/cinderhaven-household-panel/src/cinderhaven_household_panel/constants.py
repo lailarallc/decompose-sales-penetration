@@ -22,6 +22,15 @@ except ImportError as exc:  # pragma: no cover - environment setup guard
         "<doormath>/packages/cinderhaven-store-universe`."
     ) from exc
 
+def line_of(sku: str) -> str:
+    """Product-line code for a canonical SKU (``CHP-SB-010`` -> ``SB``).
+
+    The one place the SKU-string contract is parsed; pricing and transactions
+    both import this rather than re-splitting the id.
+    """
+    return sku.split("-")[1]
+
+
 # --- Locked generation seed --------------------------------------------------
 # Generation is deterministic given this value. Matches the house seed.
 SEED = 42
@@ -62,6 +71,7 @@ PANEL_START_YEAR = 2023
 
 __all__ = [
     "ALL_SKUS",
+    "line_of",
     "DEMO_AS_OF_DATE",
     "PRODUCT_LINES",
     "REGIONS",

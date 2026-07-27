@@ -9,7 +9,7 @@ import pandas as pd
 
 from .calendar import QUARTERS
 from ._rng import child_rng
-from .constants import ALL_SKUS, PANEL_START_YEAR, PRODUCT_LINES, TOTAL_QUARTERS
+from .constants import ALL_SKUS, PRODUCT_LINES, line_of
 
 # Base price range ($/unit) per product line for the ~$25M specialty brand.
 _LINE_PRICE_RANGE = {
@@ -33,16 +33,12 @@ PRICE_ELASTICITY = 1.2
 _PRICE_RAMP_2025 = {1: 1.08, 2: 1.12, 3: 1.16, 4: 1.20}
 
 
-def _line_of(sku: str) -> str:
-    return sku.split("-")[1]
-
-
 def get_sku_prices() -> pd.DataFrame:
     """Deterministic base price per SKU (sku_id, product_line, base_price)."""
     rng = child_rng("prices")
     rows = []
     for sku in ALL_SKUS:
-        line = _line_of(sku)
+        line = line_of(sku)
         lo, hi = _LINE_PRICE_RANGE[line]
         base = round(float(rng.uniform(lo, hi)), 2)
         rows.append({"sku_id": sku, "product_line": line, "base_price": base})
@@ -50,14 +46,16 @@ def get_sku_prices() -> pd.DataFrame:
 
 
 def build_price_path() -> pd.DataFrame:
-    """Brand price index per quarter (quarter_index, label, price_index)."""
+    """Brand price index per quarter (quarter_index, label, price_index).
+
+    Periods come from the calendar (the single source of truth for quarter
+    boundaries), so labels/indices can never desync from the rest of the panel.
+    """
     rows = []
-    for i in range(TOTAL_QUARTERS):
-        year = PANEL_START_YEAR + i // 4
-        quarter = i % 4 + 1
-        price_index = _PRICE_RAMP_2025[quarter] if year >= 2025 else 1.00
+    for q in QUARTERS.itertuples(index=False):
+        price_index = _PRICE_RAMP_2025[q.quarter] if q.year >= 2025 else 1.00
         rows.append(
-            {"quarter_index": i, "label": f"{year}-Q{quarter}", "price_index": price_index}
+            {"quarter_index": q.quarter_index, "label": q.label, "price_index": price_index}
         )
     return pd.DataFrame(rows)
 

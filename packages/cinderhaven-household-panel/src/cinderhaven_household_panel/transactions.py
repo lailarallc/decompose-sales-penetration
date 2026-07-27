@@ -21,7 +21,7 @@ import pandas as pd
 
 from ._rng import child_rng
 from .calendar import get_quarters
-from .constants import ALL_SKUS, N_HOUSEHOLDS, RETAILERS
+from .constants import ALL_SKUS, N_HOUSEHOLDS, RETAILERS, line_of
 from .households import get_households
 from .pricing import (
     LAUNCH_ITEMS,
@@ -52,10 +52,6 @@ _RETAILER_WEIGHTS = np.array(
 _RETAILER_WEIGHTS /= _RETAILER_WEIGHTS.sum()
 
 
-def _line_of(sku: str) -> str:
-    return sku.split("-")[1]
-
-
 def _base_transactions(hh: pd.DataFrame, quarters: pd.DataFrame,
                        prices: pd.DataFrame, price_path: pd.Series) -> pd.DataFrame:
     """Vectorized base assortment trips for all households across all quarters."""
@@ -70,7 +66,7 @@ def _base_transactions(hh: pd.DataFrame, quarters: pd.DataFrame,
     # separately with trial/repeat). Popularity is a skewed Dirichlet share.
     general = [s for s in ALL_SKUS if s not in LAUNCH_ITEMS]
     general_arr = np.array(general)
-    general_lines = np.array([_line_of(s) for s in general])
+    general_lines = np.array([line_of(s) for s in general])
     price_lookup = prices.set_index("sku_id")["base_price"]
     general_base_price = price_lookup.loc[general].to_numpy()
     weights = child_rng("popularity").dirichlet(np.full(len(general), 0.9))
@@ -124,11 +120,10 @@ def _launch_transactions(hh: pd.DataFrame, quarters: pd.DataFrame,
     affinity = hh["innovator_affinity"].to_numpy()
     hh_ids = hh["household_id"].to_numpy()
     q_by_index = quarters.set_index("quarter_index")
-    later_by_launch = {}
 
     rows = []
     for sku, cfg in LAUNCH_ITEMS.items():
-        line = _line_of(sku)
+        line = line_of(sku)
         base_price = float(price_lookup.loc[sku])
         lq = cfg["launch_quarter_index"]
         reach = cfg["trial_reach"]
@@ -141,7 +136,6 @@ def _launch_transactions(hh: pd.DataFrame, quarters: pd.DataFrame,
         trier_pos = np.where(tried)[0]
 
         later_quarters = quarters.loc[quarters["quarter_index"] > lq, "quarter_index"].tolist()
-        later_by_launch[sku] = later_quarters
 
         def _emit(pos_array, qi):
             if len(pos_array) == 0:
