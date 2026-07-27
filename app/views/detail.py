@@ -19,7 +19,9 @@ def _fmt_cents(value):
 
 
 def _sign(delta: float) -> str:
-    return "+" if delta >= 0 else "−"
+    if delta == 0:
+        return ""
+    return "+" if delta > 0 else "−"
 
 
 # Delta formatters — each takes the signed A→B change and formats it with a sign in
@@ -82,8 +84,13 @@ def layout():
 
 def _metric_card(label, value_fmt, delta_fmt, a_val, b_val):
     delta = b_val - a_val
-    up = delta >= 0
     change = delta_fmt(delta)
+    if delta == 0:
+        delta_class = "delta-flat"
+    elif delta > 0:
+        delta_class = "delta-up"
+    else:
+        delta_class = "delta-down"
     return html.Div(
         [
             html.Div(label, className="metric-card-label"),
@@ -91,7 +98,7 @@ def _metric_card(label, value_fmt, delta_fmt, a_val, b_val):
             html.Div(
                 [
                     html.Span(f"from {value_fmt(a_val)}", className="metric-card-prev"),
-                    html.Span(change, className=f"metric-card-delta {'delta-up' if up else 'delta-down'}"),
+                    html.Span(change, className=f"metric-card-delta {delta_class}"),
                 ],
                 className="metric-card-foot",
             ),

@@ -659,6 +659,7 @@ html, body {
 }
 .metric-card-delta.delta-up { color: var(--ll-hk-25); }
 .metric-card-delta.delta-down { color: var(--ll-tokyo-40); }
+.metric-card-delta.delta-flat { color: var(--ll-reference, #666); }
 
 /* DS display type-scale — mobile steps (desktop values set on each rule above) */
 @media (max-width: 640px) {
