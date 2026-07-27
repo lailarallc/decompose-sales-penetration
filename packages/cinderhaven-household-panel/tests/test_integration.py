@@ -5,9 +5,8 @@ accessor returns identical frames across generations, the public surface tool #4
 depends on is present, and an end-to-end pull works from a fresh import.
 """
 
-import pandas as pd
-
 import cinderhaven_household_panel as hp
+import pandas as pd
 
 _FRAME_ACCESSORS = [
     "get_quarters",

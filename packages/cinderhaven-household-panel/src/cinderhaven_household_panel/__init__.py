@@ -35,6 +35,7 @@ from .constants import (
     TOTAL_QUARTERS,
 )
 from .households import get_households
+from .metrics import get_buyer_flow, get_period_metrics
 from .pricing import (
     LAUNCH_ITEMS,
     get_launch_items,
@@ -43,7 +44,6 @@ from .pricing import (
 )
 from .projection import get_projection_factor
 from .transactions import get_transactions
-from .metrics import get_buyer_flow, get_period_metrics
 
 __all__ = [
     # canonical universe (reused from cinderhaven-store-universe)

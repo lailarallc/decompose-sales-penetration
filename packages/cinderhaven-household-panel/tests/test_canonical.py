@@ -4,10 +4,9 @@ Mirrors the cinderhaven-store-universe test_canonical.py pattern. Grows with eac
 Slice 1 sub-task; this file currently covers A1 (constants + calendar).
 """
 
+import cinderhaven_household_panel as hp
 import pandas as pd
 import pytest
-
-import cinderhaven_household_panel as hp
 
 
 @pytest.fixture(scope="module")
