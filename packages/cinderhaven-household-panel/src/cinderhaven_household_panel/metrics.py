@@ -23,7 +23,7 @@ from .projection import (
 from .transactions import get_transactions
 
 
-def _filtered(product_line=None, retailer_id=None) -> pd.DataFrame:
+def _filtered(product_line: str | None = None, retailer_id: str | None = None) -> pd.DataFrame:
     tx = get_transactions()
     if product_line is not None:
         tx = tx[tx["product_line"] == product_line]
@@ -32,7 +32,9 @@ def _filtered(product_line=None, retailer_id=None) -> pd.DataFrame:
     return tx
 
 
-def get_period_metrics(product_line=None, retailer_id=None) -> pd.DataFrame:
+def get_period_metrics(
+    product_line: str | None = None, retailer_id: str | None = None
+) -> pd.DataFrame:
     """Per-quarter metrics: penetration, the three levers, and their sub-splits.
 
     Columns: quarter_index, quarter_label, is_analysis, buying_households,
@@ -74,7 +76,9 @@ def get_period_metrics(product_line=None, retailer_id=None) -> pd.DataFrame:
     return m.rename(columns={"label": "quarter_label"}).reset_index(drop=True)
 
 
-def get_buyer_flow(product_line=None, retailer_id=None) -> pd.DataFrame:
+def get_buyer_flow(
+    product_line: str | None = None, retailer_id: str | None = None
+) -> pd.DataFrame:
     """New / retained / lapsed buyer flow for each adjacent quarter pair.
 
     Columns: from_index, from_label, to_label, prior_buyers, current_buyers,
@@ -118,5 +122,5 @@ def get_buyer_flow(product_line=None, retailer_id=None) -> pd.DataFrame:
     return flow
 
 
-def _safe_div(numer, denom):
+def _safe_div(numer: pd.Series, denom: pd.Series) -> pd.Series:
     return (numer / denom.where(denom != 0)).fillna(0.0)

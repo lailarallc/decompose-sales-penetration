@@ -6,6 +6,8 @@ longest category label always renders, and currency ticks that show each tick's 
 value with no duplicates.
 """
 
+import math
+
 from app.constants import (
     CANVAS,
     FONT_SANS,
@@ -71,7 +73,6 @@ def _nice_dollar_dtick(max_value: float) -> float:
     """
     if max_value <= 0:
         return 1.0
-    import math
 
     raw = max_value / 6.0
     magnitude = 10 ** math.floor(math.log10(raw))

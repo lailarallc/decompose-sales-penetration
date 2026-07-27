@@ -17,11 +17,24 @@ forbids re-implementing). Measured, not assumed — see DECISIONS.md.
 import json
 import logging
 import time
+from typing import TypedDict
 
 import cinderhaven_household_panel as panel
 import pandas as pd
 
-from app.decomposition import three_lever_waterfall, which_lever_verdict
+from app.decomposition import (
+    Verdict,
+    Waterfall,
+    three_lever_waterfall,
+    which_lever_verdict,
+)
+
+
+class DecomposeResult(TypedDict):
+    """The bundle a view renders: the reconciling waterfall + its plain-language verdict."""
+
+    waterfall: Waterfall
+    verdict: Verdict
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +135,7 @@ def get_flow(product_line: str | None = None, retailer_id: str | None = None) ->
 def decompose(
     period_a: str, period_b: str,
     product_line: str | None = None, retailer_id: str | None = None,
-) -> dict:
+) -> DecomposeResult:
     """Bundle the three-lever waterfall and plain-language verdict for a period pair.
 
     This is what the views render: the Shapley waterfall (reconciles to ΔSales) plus

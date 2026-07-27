@@ -16,10 +16,21 @@ All inputs come from the panel's ``get_period_metrics`` — nothing is invented 
 """
 
 from dataclasses import dataclass
+from typing import TypedDict
 
 from cinderhaven_household_panel import get_period_metrics
 
 LEVERS = ("buying_households", "frequency", "spend_per_trip")
+
+# A lever must account for at least this share of total gross movement to be named the
+# single driver; below it, the verdict hedges ("mixed").
+DEFAULT_DOMINANCE_THRESHOLD = 0.5
+
+# Shapley coalition weights for three factors: a factor's marginal effect is averaged
+# over the four states of the other two — both at the same endpoint weight 1/3, the two
+# mixed states weight 1/6.
+_W_SAME = 1 / 3
+_W_MIXED = 1 / 6
 
 # Direction-aware plain-language phrases for each lever, keyed by (lever, went_up).
 _LEVER_PHRASES = {
@@ -34,9 +45,17 @@ _LEVER_PHRASES = {
 
 def _lever_phrase(lever: str, contribution: float) -> str:
     return _LEVER_PHRASES[(lever, contribution >= 0)]
-# Default: a lever must account for at least this share of the total gross movement to
-# be named the single driver; otherwise the verdict hedges ("mixed").
-DEFAULT_DOMINANCE_THRESHOLD = 0.5
+
+
+class Verdict(TypedDict):
+    """The 'which lever' verdict shape the views render."""
+
+    headline_lever: str      # winning lever code, "mixed", or "none"
+    direction: str           # "up" | "down" | "flat"
+    dominant: bool
+    shares: dict[str, float]
+    contributions: dict[str, float]
+    sentence: str
 
 
 @dataclass(frozen=True)
@@ -46,7 +65,7 @@ class Waterfall:
     sales_a: float
     sales_b: float
     delta: float
-    contributions: dict          # lever -> $ contribution to the delta (sum == delta)
+    contributions: dict[str, float]  # lever -> $ contribution to the delta (sum == delta)
     product_line: str | None = None
     retailer_id: str | None = None
 
@@ -55,20 +74,33 @@ class Waterfall:
         return abs(sum(self.contributions.values()) - self.delta) <= 1e-6
 
 
+def _shapley_factor(d: float, x0: float, y0: float, x1: float, y1: float) -> float:
+    """One factor's Shapley contribution to A*B*C, given its own change ``d`` and the
+    old/new values ``(x0,x1)``, ``(y0,y1)`` of the other two factors."""
+    return (
+        _W_SAME * d * x0 * y0
+        + _W_MIXED * d * x1 * y0
+        + _W_MIXED * d * x0 * y1
+        + _W_SAME * d * x1 * y1
+    )
+
+
 def _shapley_three_factor(a0, b0, c0, a1, b1, c1):
     """Exact Shapley contributions of A, B, C to the change in the product A*B*C.
 
-    Coalition weights for n=3: empty/full sets weight 1/3, singletons 1/6.
+    Efficiency guarantees the three contributions sum exactly to a1*b1*c1 - a0*b0*c0.
     """
     da, db, dc = a1 - a0, b1 - b0, c1 - c0
-    phi_a = (1 / 3) * da * b0 * c0 + (1 / 6) * da * b1 * c0 + (1 / 6) * da * b0 * c1 + (1 / 3) * da * b1 * c1
-    phi_b = (1 / 3) * a0 * db * c0 + (1 / 6) * a1 * db * c0 + (1 / 6) * a0 * db * c1 + (1 / 3) * a1 * db * c1
-    phi_c = (1 / 3) * a0 * b0 * dc + (1 / 6) * a1 * b0 * dc + (1 / 6) * a0 * b1 * dc + (1 / 3) * a1 * b1 * dc
-    return phi_a, phi_b, phi_c
+    return (
+        _shapley_factor(da, b0, c0, b1, c1),
+        _shapley_factor(db, a0, c0, a1, c1),
+        _shapley_factor(dc, a0, b0, a1, b1),
+    )
 
 
 def three_lever_waterfall(period_a: str, period_b: str,
-                          product_line=None, retailer_id=None) -> Waterfall:
+                          product_line: str | None = None,
+                          retailer_id: str | None = None) -> Waterfall:
     """Bridge sales from period_a to period_b across the three levers (exact)."""
     m = get_period_metrics(product_line, retailer_id).set_index("quarter_label")
     if period_a not in m.index or period_b not in m.index:
@@ -96,7 +128,7 @@ def three_lever_waterfall(period_a: str, period_b: str,
     )
 
 
-def which_lever_verdict(wf: Waterfall, threshold: float = DEFAULT_DOMINANCE_THRESHOLD) -> dict:
+def which_lever_verdict(wf: Waterfall, threshold: float = DEFAULT_DOMINANCE_THRESHOLD) -> Verdict:
     """Plain-language verdict naming the driving lever, or hedging when none dominates.
 
     Dominance is share of GROSS movement (sum of absolute contributions), so two
