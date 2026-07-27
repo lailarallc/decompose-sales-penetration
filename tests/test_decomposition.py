@@ -5,14 +5,15 @@ delta — is the tool's whole credibility, so it is tested hard: exhaustively on
 Shapley kernel, and on real period pairs through the public function.
 """
 
-import numpy as np
-
 import cinderhaven_household_panel as hp
+import numpy as np
+import pytest
+
 from app.decomposition import (
+    Waterfall,
     _shapley_three_factor,
     three_lever_waterfall,
     which_lever_verdict,
-    Waterfall,
 )
 
 
@@ -111,3 +112,35 @@ class TestVerdict:
         v = which_lever_verdict(three_lever_waterfall("2024-Q4", "2025-Q4"))
         assert v["direction"] == "up"
         assert isinstance(v["sentence"], str) and v["sentence"]
+
+    def test_names_dominant_lever_on_a_decline(self):
+        # The tool's central case: sales FELL, driven by a dominant negative lever.
+        # Guards the 'fell' wording and the negative-direction lever phrases.
+        v = which_lever_verdict(self._wf(
+            {"buying_households": -90.0, "frequency": -2.0, "spend_per_trip": -5.0}
+        ))
+        assert v["direction"] == "down" and v["dominant"]
+        assert v["headline_lever"] == "buying_households"
+        assert "Sales fell $97" in v["sentence"]
+        assert "fewer households buying the brand" in v["sentence"]
+
+    def test_hedges_on_a_mixed_decline(self):
+        v = which_lever_verdict(self._wf(
+            {"buying_households": -40.0, "frequency": -35.0, "spend_per_trip": -25.0}
+        ))
+        assert v["direction"] == "down" and v["headline_lever"] == "mixed"
+        assert "fell" in v["sentence"] and "no single dominant lever" in v["sentence"]
+
+    def test_flat_verdict_when_nothing_moved(self):
+        v = which_lever_verdict(self._wf(
+            {"buying_households": 0.0, "frequency": 0.0, "spend_per_trip": 0.0}, delta=0.0
+        ))
+        assert v["direction"] == "flat" and v["headline_lever"] == "none"
+        assert not v["dominant"]
+        assert "unchanged" in v["sentence"]
+
+
+class TestUnknownPeriodGuard:
+    def test_unknown_period_raises_keyerror(self):
+        with pytest.raises(KeyError):
+            three_lever_waterfall("not-a-quarter", "2025-Q4")
