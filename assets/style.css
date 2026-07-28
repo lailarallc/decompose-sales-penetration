@@ -504,7 +504,7 @@ html, body {
 
 /* Verdict headline (Which-Lever view — the one live output in Slice 3) */
 .verdict-headline {
-    background: #fff;
+    background: var(--ll-london-95);  /* London-95 — DS soft card surface */
     border: 1px solid var(--ll-separator, #e0e0e0);
     border-top: 4px solid var(--ll-chicago-20);
     border-radius: 2px;
@@ -623,7 +623,7 @@ html, body {
     margin-bottom: 8px;
 }
 .metric-card {
-    background: #fff;
+    background: var(--ll-london-95);  /* London-95 — DS soft card surface */
     border: 1px solid var(--ll-separator, #e0e0e0);
     border-top: 3px solid var(--ll-chicago-20);
     border-radius: 2px;
@@ -689,7 +689,11 @@ html, body {
     --ag-header-height: 36px;
     --ag-font-family: var(--ll-sans);
     --ag-header-background-color: var(--ll-chicago-95);
-    --ag-odd-row-background-color: #ffffff;
+    /* DS interactive-table rows: canvas / London-95 alternating. Alpine's own
+       base is white, so the base has to be set too — overriding only the odd
+       row would leave white on every even row. */
+    --ag-background-color: var(--ll-canvas);
+    --ag-odd-row-background-color: var(--ll-london-95);
 }
 .decompose-grid .ag-cell { white-space: nowrap; }
 
