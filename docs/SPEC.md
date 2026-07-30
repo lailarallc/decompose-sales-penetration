@@ -93,7 +93,7 @@ the full contract. Summary:
 - **~5,000 households**, **12 quarters** (4 burn-in + 8 analysis). Locked `SEED`.
 - Grain: `household_id × transaction × item × date × spend`, aligned to the
   canonical universe (50 SKUs / 5 lines / 6 retailers, ~$25M brand at wholesale /
-  ~$33M/yr retail scan; ~$99M scanned over three years).
+  ~$32.3M/yr retail scan (t52w); ~$99M scanned over three years).
 - **Brand-scale projection (v0.2.0):** absolute totals (sales $, buyer/household
   counts, trip counts) are scaled by one locked factor k to retail-scan brand scale;
   rates (penetration/frequency/spend-per-trip) stay panel-measured. See DECISIONS.md.
