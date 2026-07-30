@@ -25,7 +25,9 @@ class TestFactor:
         k = hp.get_projection_factor()
         # k is defined so raw ref-year sales project exactly to the canonical anchor.
         assert abs(raw_ref_sales * k - hp.CANONICAL_ANNUAL_SCAN_REVENUE) <= 1e-3
-        assert hp.CANONICAL_ANNUAL_SCAN_REVENUE == 32_800_000
+        # Canonical retail scan, CY2025 — canonical_values.yml
+        # revenue.retail_scan.cy2025, VERIFIED-AGAINST-PRODUCTION 2026-07-29.
+        assert hp.CANONICAL_ANNUAL_SCAN_REVENUE == 32_323_139.62
 
     def test_projected_reference_year_sales_hit_the_anchor(self):
         m = hp.get_period_metrics()

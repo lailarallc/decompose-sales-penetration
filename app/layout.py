@@ -57,7 +57,9 @@ def _build_content_area():
 _PROJECTION_TIP = (
     "Household penetration, purchase frequency, and spend per trip are measured on "
     "the household panel. Dollar totals and buyer counts are projected to "
-    "Cinderhaven's brand scale (~$33M/yr at retail; ~$99M scanned over three years)."
+    "Cinderhaven's brand scale (~$32.3M retail scan in CY2025; ~$99.1M scanned "
+    "2023–2025). The panel is a synthetic overlay — the warehouse carries "
+    "neither households nor the projection factor."
 )
 
 

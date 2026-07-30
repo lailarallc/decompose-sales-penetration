@@ -30,7 +30,8 @@ buyer/household counts, trip counts — by one fixed factor `k` (`get_projection
 penetration %, purchase frequency, spend per trip) are panel-measured and NOT scaled —
 `k` cancels in a ratio. `k` is locked (one factor for every period, so real movement is
 preserved) and anchored so the reference year (2025) projects to the canonical annual
-scan revenue (`$32.8M`); it derives from the locked canonical figure, does not alter it,
+scan revenue (`$32,323,139.62`, CY2025 — canonical_values.yml `revenue.retail_scan.cy2025`,
+verified against production 2026-07-29); it derives from the verified canonical figure, does not alter it,
 and is the identical factor tool #4 uses. NB: the oft-quoted **~$99M is the 3-year
 cumulative scan total, not annual**.
 
@@ -70,7 +71,7 @@ from cinderhaven_household_panel import (
     get_period_metrics,            # per-quarter penetration, frequency, spend/trip (+ units/price split), absolute totals projected; product_line/retailer filters
     get_buyer_flow,                # new / retained / lapsed per adjacent quarter pair (projected counts)
     get_projection_factor,         # the locked brand-scale factor k (shared with #4)
-    CANONICAL_ANNUAL_SCAN_REVENUE, PROJECTION_REFERENCE_YEAR,  # $32.8M anchor, 2025
+    CANONICAL_ANNUAL_SCAN_REVENUE, PROJECTION_REFERENCE_YEAR,  # $32.32M CY2025 anchor
 )
 ```
 

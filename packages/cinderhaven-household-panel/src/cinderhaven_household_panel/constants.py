@@ -52,11 +52,16 @@ N_HOUSEHOLDS = 5_000
 # See projection.get_projection_factor for how k is derived and locked.
 #
 # Anchor: the panel's reference-year sales project to the canonical ANNUAL scan
-# revenue. This DERIVES from the locked canonical figure — it does not alter it.
-#   Canonical annual scan revenue = $32.8M (CINDERHAVEN_CANONICAL.md, trailing-52w).
-# NOTE: the ~$99M often quoted for Cinderhaven is the 3-YEAR cumulative scan total
-# (2023-01 -> 2026-01), NOT an annual figure — do not anchor annual sales to it.
-CANONICAL_ANNUAL_SCAN_REVENUE = 32_800_000
+# revenue. This DERIVES from the verified canonical figure — it does not alter it.
+#   Canonical retail scan revenue, CY2025 (== trailing-52w in this dataset):
+#   $32,323,139.62 — canonical_values.yml revenue.retail_scan.cy2025,
+#   VERIFIED-AGAINST-PRODUCTION 2026-07-29 (supersedes the $32.8M pre-causal pin).
+# NOTE: the ~$99.1M often quoted for Cinderhaven is the 3-YEAR cumulative scan total
+# (trailing_36m = $99,058,738.85), NOT an annual figure — do not anchor annual sales to it.
+# NOTE: households and the projection factor k are panel-only constructs — the
+# warehouse carries neither (canonical "absent with reason"). Never cite them as
+# warehouse-backed.
+CANONICAL_ANNUAL_SCAN_REVENUE = 32_323_139.62
 PROJECTION_REFERENCE_YEAR = 2025  # latest full analysis year ~ trailing-52w
 
 # --- Timeline: 4 burn-in quarters + 8 analysis quarters = 12 quarters --------
