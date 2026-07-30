@@ -281,7 +281,7 @@
 }
 
 .narrative-content {
-    max-width: 660px;
+    max-width: var(--ll-body-max-width, 720px);
 }
 
 .narrative-title {
@@ -301,7 +301,7 @@
     color: var(--ll-london-20);
     line-height: 1.6;
     margin: 0 0 12px 0;
-    max-width: 660px;
+    max-width: var(--ll-body-max-width, 720px);
 }
 
 .narrative-protagonist {
@@ -498,7 +498,7 @@ html, body {
     font-size: 15px;
     line-height: 1.5;
     color: var(--ll-text, #333);
-    max-width: 60ch;
+    max-width: var(--ll-body-max-width, 720px);
     margin: 0;
 }
 
@@ -534,7 +534,7 @@ html, body {
     line-height: 1.5;
     color: var(--ll-text, #333);
     margin: 14px 0 0;
-    max-width: 62ch;
+    max-width: var(--ll-body-max-width, 720px);
 }
 
 /* Slice 4 placeholders */
@@ -558,7 +558,7 @@ html, body {
     font-size: 14px;
     line-height: 1.5;
     color: var(--ll-reference, #666);
-    max-width: 54ch;
+    max-width: var(--ll-body-max-width, 720px);
     margin: 0 auto 10px;
 }
 .placeholder-tag {
@@ -602,7 +602,7 @@ html, body {
     font-size: 14px;
     line-height: 1.55;
     color: var(--ll-text, #333);
-    max-width: 64ch;
+    max-width: var(--ll-body-max-width, 720px);
     margin: 10px 0 0;
 }
 
@@ -716,7 +716,7 @@ html, body {
     line-height: 1.5;
     color: var(--ll-text, #333);
     margin: 2px 0 0;
-    max-width: 66ch;
+    max-width: var(--ll-body-max-width, 720px);
 }
 
 /* Projected-to-brand-scale chip (Slice 6) */
