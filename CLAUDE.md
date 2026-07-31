@@ -129,8 +129,8 @@ Decompose.
 
 - Reuse shared packages, don't duplicate (the `cinderhaven-store-universe`
   pattern). Lock the panel seeds and version them like `CINDERHAVEN_CANONICAL`.
-- The panel aligns to the canonical universe: ~$25M brand at wholesale (~$33M/yr
-  at retail scan; ~$99M scanned over three years — NOT an annual figure), 50 SKUs,
+- The panel aligns to the canonical universe: ~$25M brand at wholesale (~$32.3M/yr
+  at retail scan (CY2025); ~$99M scanned over three years — NOT an annual figure), 50 SKUs,
   5 product lines (AS·PS·SC·DG·SB), 6 retailers. `SEED` locked; reproducibility
   unit-tested. Absolute totals are projected to retail-scan brand scale by the panel
   package's locked factor k (v0.2.0); rates stay panel-measured. See DECISIONS.md.

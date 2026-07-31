@@ -20,7 +20,7 @@ a canonical test — exactly how `cinderhaven-store-universe` is shipped.
 
 `household_id × transaction × item × date × spend` — with derived per-period
 aggregates. Households buy the canonical universe: ~$25M brand at wholesale
-(~$33M/yr at retail scan), 50 SKUs, 5 product lines (AS·PS·SC·DG·SB), 6 retailers.
+(~$32.3M/yr at retail scan (CY2025)), 50 SKUs, 5 product lines (AS·PS·SC·DG·SB), 6 retailers.
 
 ## Brand-scale projection (v0.2.0)
 
