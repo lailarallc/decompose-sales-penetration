@@ -55,7 +55,8 @@ N_HOUSEHOLDS = 5_000
 # revenue. This DERIVES from the verified canonical figure — it does not alter it.
 #   Canonical retail scan revenue, CY2025 (== trailing-52w in this dataset):
 #   $32,323,139.62 — canonical_values.yml revenue.retail_scan.cy2025,
-#   VERIFIED-AGAINST-PRODUCTION 2026-07-29 (supersedes the $32.8M pre-causal pin).
+#   VERIFIED-AGAINST-PRODUCTION 2026-07-29 (supersedes the earlier pre-causal pin;
+#   see the platform SUPERSEDES table for the retired value).
 # NOTE: the ~$99.1M often quoted for Cinderhaven is the 3-YEAR cumulative scan total
 # (trailing_36m = $99,058,738.85), NOT an annual figure — do not anchor annual sales to it.
 # NOTE: households and the projection factor k are panel-only constructs — the
