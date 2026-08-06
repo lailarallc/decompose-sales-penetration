@@ -73,6 +73,26 @@ def test_deliverable_shows_verdict_and_reconciliation(tmp_path):
     assert "DRAFT" in html
 
 
+def test_period_labels_track_config_not_hardcoded(tmp_path):
+    """The rendered period labels ('A → B', 'Sales A .. → B ..') must be
+    basis.period_a / period_b from the data, not a hardcoded default. The suite
+    asserted the delta and verdict but never the period text — hardcoded periods
+    matching the demo would pass, the gap that let trade-spend quote 26 weeks as
+    'trailing 52 weeks'.
+
+    Both halves: relabel the panel to distinctive periods and assert they render,
+    AND assert the demo default labels are absent."""
+    tx = _transactions()
+    tx["period"] = tx["period"].replace({"2025-Q1": "2024-H1", "2025-Q2": "2024-H2"})
+    tp = _write(tmp_path, tx=tx)
+    cfg = _cfg(tmp_path, period_a="2024-H1", period_b="2024-H2")
+    res = client_mode.run(str(cfg), str(tmp_path / "out"), _args(str(tp)))
+    assert res["status"] == "ok"
+    html = Path(res["report"]).read_text(encoding="utf-8")
+    assert "2024-H1 → 2024-H2" in html
+    assert "2025-Q1" not in html and "2025-Q2" not in html    # demo defaults must not survive
+
+
 def test_missing_spend_column_blocks(tmp_path):
     tp = _write(tmp_path)
     pd.read_csv(tp).drop(columns=["spend"]).to_csv(tp, index=False)
