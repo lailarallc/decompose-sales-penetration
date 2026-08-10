@@ -8,3 +8,9 @@ screenshots/
 *.parquet
 .ruff_cache
 docs/
+
+# --- lailara engagement scaffold ---
+client-data/
+client-output/
+engagement.yml
+engagement.yaml

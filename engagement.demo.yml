@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lailara LLC — Decompose engagement config (DEMO)
+#
+# Demo identity is the canonical Cinderhaven brand; `demo: true` so the deploy
+# guard ignores it. The deployed demo renders from the seeded
+# cinderhaven_household_panel package — this config exercises client_mode.py on a
+# demo-shaped panel-transaction file under client-data/ (gitignored).
+# ─────────────────────────────────────────────────────────────────────────────
+
+client:
+  name: "Cinderhaven Provisions (demo)"
+
+engagement:
+  id: "CINDERHAVEN-DEMO"
+
+as_of_date: "2025-12-27"
+
+prepared_by: "Lailara LLC"
+
+demo: true
+
+basis:
+  period_a: "2025-Q1"
+  period_b: "2025-Q2"
+
+inputs:
+  transactions: "client-data/transactions.csv"
+
+columns:
+  household_id: "household_id"
+  period: "period"
+  spend: "spend"
+  trip_id: "trip_id"
+  units: "units"
+
+thresholds:
+  fail_on_missing_required_column: true
