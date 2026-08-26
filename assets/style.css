@@ -483,8 +483,10 @@ html, body {
 
 /* View heading + blurb */
 /* Set a brand token on the wrapper so it never inherits a stray UA serif; the
-   title (serif) and blurb (sans) below set their own family regardless. */
-.view-heading { margin: 8px 0 20px; font-family: var(--ll-sans); }
+   title (serif) and blurb (sans) below set their own family regardless.
+   The wrapper also owns the content-column edge (--ll-content-measure, frame
+   v1.5.0) so the title never wraps wider than the blurb beneath it. */
+.view-heading { margin: 8px 0 20px; font-family: var(--ll-sans); max-width: var(--ll-content-measure, 720px); }
 .view-title {
     font-family: var(--ll-serif);
     font-size: 22px;   /* DS section title (desktop); 18px mobile below */
@@ -498,8 +500,8 @@ html, body {
     font-size: 15px;
     line-height: 1.5;
     color: var(--ll-text, #333);
-    max-width: var(--ll-body-max-width, 720px);
     margin: 0;
+    /* measure inherited from .view-heading column edge */
 }
 
 /* Verdict headline (Which-Lever view — the one live output in Slice 3) */
@@ -510,6 +512,8 @@ html, body {
     border-radius: 2px;
     padding: 22px 24px;
     margin-bottom: 24px;
+    /* Hero content column: figure + change + sentence share one edge. */
+    max-width: var(--ll-content-measure, 720px);
 }
 .verdict-figure {
     font-family: var(--ll-serif);
@@ -534,7 +538,7 @@ html, body {
     line-height: 1.5;
     color: var(--ll-text, #333);
     margin: 14px 0 0;
-    max-width: var(--ll-body-max-width, 720px);
+    /* measure inherited from .verdict-headline column edge */
 }
 
 /* Slice 4 placeholders */
@@ -583,6 +587,8 @@ html, body {
     border-top: 1px solid var(--ll-separator, #e0e0e0);
     margin-top: 8px;
     padding-top: 12px;
+    /* Content column: toggle + body share one edge. */
+    max-width: var(--ll-content-measure, 720px);
 }
 .why-toggle {
     font-family: var(--ll-sans);
@@ -602,8 +608,8 @@ html, body {
     font-size: 14px;
     line-height: 1.55;
     color: var(--ll-text, #333);
-    max-width: var(--ll-body-max-width, 720px);
     margin: 10px 0 0;
+    /* measure inherited from .why-details column edge */
 }
 
 /* ── Detail view: metric cards + grid (Slice 4) ────────────────────── */
@@ -698,7 +704,8 @@ html, body {
 .decompose-grid .ag-cell { white-space: nowrap; }
 
 /* Glossary (Slice 4) */
-.glossary-list { margin: 12px 0 0; }
+/* Content column: terms + definitions share one edge. */
+.glossary-list { margin: 12px 0 0; max-width: var(--ll-content-measure, 720px); }
 .glossary-row {
     padding: 8px 0;
     border-bottom: 1px solid var(--ll-separator, #e0e0e0);
@@ -716,7 +723,7 @@ html, body {
     line-height: 1.5;
     color: var(--ll-text, #333);
     margin: 2px 0 0;
-    max-width: var(--ll-body-max-width, 720px);
+    /* measure inherited from .glossary-list column edge */
 }
 
 /* Projected-to-brand-scale chip (Slice 6) */
