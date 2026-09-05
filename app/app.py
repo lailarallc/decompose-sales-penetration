@@ -16,7 +16,37 @@ app = dash.Dash(
     assets_folder="../assets",
     suppress_callback_exceptions=True,
     title="Decompose — Which Lever Moved Sales",
-    meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
+    meta_tags=[
+        {"name": "viewport", "content": "width=device-width, initial-scale=1"},
+        {
+            "name": "description",
+            "content": (
+                "Splits a period-over-period sales change into buying households, "
+                "purchase frequency, and spend per trip, reconciled to the exact delta."
+            ),
+        },
+        {"property": "og:title", "content": "Decompose: Which Lever Moved Sales"},
+        {
+            "property": "og:description",
+            "content": (
+                "Splits a period-over-period sales change into buying households, "
+                "purchase frequency, and spend per trip, reconciled to the exact delta."
+            ),
+        },
+        {"property": "og:type", "content": "website"},
+        {"property": "og:url", "content": "https://decompose.lailarallc.com/"},
+        {"property": "og:image", "content": "https://lailarallc.com/og/s/decompose.png"},
+        {
+            "property": "og:image:secure_url",
+            "content": "https://lailarallc.com/og/s/decompose.png",
+        },
+        {"property": "og:image:type", "content": "image/png"},
+        {"property": "og:image:width", "content": "1200"},
+        {"property": "og:image:height", "content": "630"},
+        {"property": "og:image:alt", "content": "Decompose: Which Lever Moved Sales"},
+        {"name": "twitter:card", "content": "summary_large_image"},
+        {"name": "twitter:image", "content": "https://lailarallc.com/og/s/decompose.png"},
+    ],
 )
 server = app.server
 server.secret_key = os.environ.get("FLASK_SECRET_KEY", secrets.token_hex(32))
