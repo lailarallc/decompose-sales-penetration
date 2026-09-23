@@ -267,3 +267,9 @@ Steps:
   framing *portfolio-wide* is Shawn's copy-pass call (canonical says "use $25M"); the
   blog/work-card drafts still await Shawn's copy pass; Void Finder needs a redeploy.
 - **Next review:** 2026-07-27 (active project; just shipped Slice 6).
+
+### 2026-09-23 — Audit (health check only)
+- **Findings:** 1 critical, 5 important, 4 nice-to-have
+- **Top concerns:** Client mode silently miscounts trips when trip_id is partly blank or all-null (collapses to one trip per household), so frequency and spend-per-trip are wrong while the waterfall still reconciles. The Fly deploy workflow is not gated on the golden, drift, or client-mode checks. Panel k anchor changed ($32.8M to $32.32M) without a PANEL_VERSION bump, and HANDOFF/PLAN/README lag the Jul 29 to Sep 5 client-mode and CI work.
+- **Action taken:** Audit only — no fixes this session
+- **Next review:** 2026-10-21
